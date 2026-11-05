@@ -1,0 +1,57 @@
+{
+  "entities": {
+    "UserProfile": {
+      "collection": "users",
+      "path": "users/{userId}",
+      "fields": {
+        "uid": { "type": "string" },
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoUrl": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      },
+      "rules": {
+        "read": "request.auth != null && request.auth.uid == userId",
+        "write": "request.auth != null && request.auth.uid == userId"
+      }
+    },
+    "UserPlaylist": {
+      "collection": "playlists",
+      "path": "users/{userId}/playlists/{playlistId}",
+      "fields": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "emoji": { "type": "string" },
+        "songIds": { "type": "list" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      },
+      "rules": {
+        "read": "request.auth != null && request.auth.uid == userId",
+        "write": "request.auth != null && request.auth.uid == userId"
+      }
+    },
+    "SharedPlaylist": {
+      "collection": "shared_playlists",
+      "path": "shared_playlists/{playlistId}",
+      "fields": {
+        "id": { "type": "string" },
+        "createdBy": { "type": "string" },
+        "authorName": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "emoji": { "type": "string" },
+        "songIds": { "type": "list" },
+        "createdAt": { "type": "timestamp" }
+      },
+      "rules": {
+        "read": "request.auth != null",
+        "create": "request.auth != null && request.resource.data.createdBy == request.auth.uid",
+        "update": "request.auth != null && resource.data.createdBy == request.auth.uid",
+        "delete": "request.auth != null && resource.data.createdBy == request.auth.uid"
+      }
+    }
+  }
+}
